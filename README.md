@@ -44,4 +44,4 @@ If you see the above then...
 You are ready to go. Next step is to go inside the `docs/` folder where you will find the labs to perform.
 
 ### For quick debugging
-If you quickly want to see what verilog is being generated, go to this link  https://bit.ly/3u3zr0e and write Chisel here.
+If you quickly want to see what verilog is being generated, go to this link  https://bit.ly/3u3zr0e and write Chisel here..
