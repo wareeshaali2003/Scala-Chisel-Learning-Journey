@@ -4,7 +4,7 @@ import chisel3.util._
 class data_Mem (val size : Int = 32 , val width : Int = 32) extends
 Module {
 val io = IO (new Bundle {
-val addr = Input ( SInt ( width . W ) )
+val addr = Input ( UInt ( width . W ) )
 val data = Input ( SInt ( width . W ) )
 val wen = Input ( Bool() )
 val ren = Input ( Bool() )

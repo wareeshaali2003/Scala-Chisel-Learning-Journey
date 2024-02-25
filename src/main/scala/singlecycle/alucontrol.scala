@@ -31,9 +31,9 @@ when(io.aluop === "b000".U) {
      io.alucontrol := Cat("b00000".U)
   }
 //   utype
-     .elsewhen(io.aluop === "b100".U) { 
-     io.alucontrol := Cat("b00000".U)
-  }
+  //    .elsewhen(io.aluop === "b100".U) { 
+  //    io.alucontrol := Cat("b00000".U)
+  // }
 //   ujtype
      .elsewhen(io.aluop === "b101".U) { 
      io.alucontrol := Cat("b00000".U)

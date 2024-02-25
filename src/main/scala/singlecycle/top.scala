@@ -16,7 +16,7 @@ class Top extends Module {
   val regfilemod = Module(new RegFile )
   val immgenmod = Module(new ImmdValGen1)
   val branchmod = Module(new BranchControl)
-
+  val jalrmod = Module(new jalr )
 
   dontTouch(instrmem_mod.io)
   dontTouch(pcmodule.io)
@@ -28,6 +28,7 @@ class Top extends Module {
   dontTouch(regfilemod.io)
   dontTouch(immgenmod.io)
   dontTouch(branchmod.io)
+  dontTouch(jalrmod.io)
 
   // pc
   pcmodule.io.in := pcmodule.io.pc4
@@ -53,7 +54,7 @@ class Top extends Module {
 
   // regfile write
   regfilemod.io.wen := ctrnmod.io.regwrite
-  datamem_mod.io.data := regfilemod.io.rdata2
+  
   
 
   // control to alu
@@ -109,33 +110,37 @@ val immdate  = MuxCase(0.S, Array(
 val mux1_alu = Mux (ctrnmod.io.opB, immdate, regfilemod.io.rdata2 )
      branchmod.io.arg_y:= mux1_alu
   
-// opB mux
-// when(ctrnmod.io.opB === "b0".S) {
-//   alumodule.io.in_B := regfilemod.io.rdata2
-// }
-// .elsewhen(ctrnmod.io.opB === "b1".S) {
-//   alumodule.io.in_B := immdate
-// }
-// .otherwise {
-//   alumodule.io.in_B := 0.S // Default case when none of the conditions match
-// }
+
 // opB mux
 val mux2_alu = Mux (ctrnmod.io.opB, immdate, regfilemod.io.rdata2 )
     alumodule.io.in_B := mux2_alu
-    datamem_mod.io.addr:= alumodule.io.out
+    
     alumodule.io.alu_Op := alucontolmod.io.alucontrol
 
 
 // smallmux of branch 
 val mux_br = Mux (branchmod.io.br_taken, immgenmod.io.sb_imm.asUInt , pcmodule.io.pc4 )
+
 // main mux 
 pcmodule.io.in := MuxCase(0.U, Array(
-  (ctrnmod.io.next_pc_sel=== "b00".U) -> pcmodule.io.pc4,
-  (ctrnmod.io.next_pc_sel === "b01".U) -> mux_br,
-  (ctrnmod.io.next_pc_sel === "b10".U) -> immgenmod.io.uj_imm.asUInt
+  (ctrnmod.io.next_pc_sel==="b00".U) -> pcmodule.io.pc4,
+  (ctrnmod.io.next_pc_sel==="b01".U) -> mux_br,
+  (ctrnmod.io.next_pc_sel==="b10".U) -> immgenmod.io.uj_imm.asUInt,
+  (ctrnmod.io.next_pc_sel==="b11".U) -> jalrmod.io.out.asUInt
 ))
 
-// controlmod
+// jalr
+jalrmod.io.imm := immdate
+jalrmod.io.rs1 := regfilemod.io.rdata1 
+
+
+
+
+// store
+datamem_mod.io.data := regfilemod.io.rdata2
+datamem_mod.io.addr:= (alumodule.io.out(9,2)).asUInt
+
+// writeback mux
 regfilemod.io.wdata := MuxCase(0.S, Array(
   (ctrnmod.io.memtoreg === 0.B) -> alumodule.io.out,
   (ctrnmod.io.memtoreg === 1.B) -> datamem_mod.io.output

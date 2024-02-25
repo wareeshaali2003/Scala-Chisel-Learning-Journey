@@ -63,4 +63,52 @@ class control extends Module {
     io.extendsel := 0.U
     io.next_pc_sel :="b01".U
   }
+   .elsewhen (io.instr === "b1101111".U){        //jal-type
+            io. memwrite := 0.B
+            io. Branch := 0.B
+            io. memread := 0.B 
+            io. regwrite := 1.B
+            io. memtoreg := 0.B
+            io. opA := "b01".U
+            io. opB := 0.B
+            io. extendsel := "b00".U
+            io.next_pc_sel := "b10".U
+            io.aluop := "b011".U
+        }
+    .elsewhen (io.instr === "b1100111".U){        //jalr-type
+            io. memwrite := 0.B
+            io. Branch := 0.B
+            io. memread := 0.B 
+            io. regwrite := 1.B
+            io. memtoreg := 0.B
+            io. opA := "b01".U
+            io. opB := 1.B
+            io. extendsel := "b00".U
+            io.next_pc_sel := "b11".U
+            io.aluop := "b011".U
+        }
+    .elsewhen (io.instr === "b0100011".U){        //s-type
+            io. memwrite := 1.B
+            io. Branch := 0.B
+            io. memread := 0.B 
+            io. regwrite := 1.B
+            io. memtoreg := 0.B
+            io. opA := "b00".U
+            io. opB := 1.B
+            io. extendsel := "b01".U
+            io.next_pc_sel := "b00".U
+            io.aluop := "b101".U
+        }
+    .elsewhen (io.instr === "b0000011".U){     //load-type
+            io. memwrite := 0.B
+            io. Branch := 0.B
+            io. memread := 1.B 
+            io. regwrite := 1.B
+            io. memtoreg := 1.B
+            io. opA := "b00".U
+            io. opB := 1.B
+            io. extendsel := "b00".U
+            io.next_pc_sel := "b00".U
+            io.aluop := "b100".U
+        }
     }
