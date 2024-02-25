@@ -103,8 +103,6 @@ val immdate  = MuxCase(0.S, Array(
 ))
 
 
-
-
 // branch in_B
 // opB
 val mux1_alu = Mux (ctrnmod.io.opB, immdate, regfilemod.io.rdata2 )
@@ -113,8 +111,8 @@ val mux1_alu = Mux (ctrnmod.io.opB, immdate, regfilemod.io.rdata2 )
 
 // opB mux
 val mux2_alu = Mux (ctrnmod.io.opB, immdate, regfilemod.io.rdata2 )
+
     alumodule.io.in_B := mux2_alu
-    
     alumodule.io.alu_Op := alucontolmod.io.alucontrol
 
 

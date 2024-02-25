@@ -111,4 +111,16 @@ class control extends Module {
             io.next_pc_sel := "b00".U
             io.aluop := "b100".U
         }
+    .elsewhen (io.instr === "b0110111".U){     //lui-type
+            io. memwrite := 0.B
+            io. Branch := 0.B
+            io. memread := 0.B 
+            io. regwrite := 1.B
+            io. memtoreg := 0.B
+            io. opA := "b10".U
+            io. opB := 1.B
+            io. extendsel := "b10".U
+            io.next_pc_sel := "b00".U
+            io.aluop := "b110".U
+        }
     }
